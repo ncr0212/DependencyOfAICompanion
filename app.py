@@ -257,27 +257,54 @@ with tab_sim:
             value=f"{clamped_score:.2f} / 10.0"
         )
 
-        # 위험도 라벨 및 설명
+        # 위험도 라벨, 색상 및 안전 가이드라인 연계
         if clamped_score < 4.0:
-            risk_label = "🟢 낮음 (Low)"
+            risk_label = "🟢 안전 (Low Risk)"
             risk_color = "#10b981"
-            risk_desc = "AI 동반자에 대한 정서적 의존도가 낮은 수준입니다."
+            risk_desc = "AI 동반자에 대한 정서적 의존도가 건전하고 안정적인 수준입니다."
+            guidelines = [
+                "✅ 현재 균형 잡힌 AI 활용 습관을 유지하세요.",
+                "✅ 오프라인 대인 관계 및 취미 활동에 꾸준히 참여하세요."
+            ]
+            alert_box_bg = "#ecfdf5"
+            alert_border = "#10b981"
         elif clamped_score < 7.0:
-            risk_label = "🟡 보통 (Moderate)"
+            risk_label = "🟡 주의 (Moderate Risk)"
             risk_color = "#f59e0b"
-            risk_desc = "외로움이나 스트레스 발생 시 AI에 대한 의존성이 높아질 수 있습니다."
+            risk_desc = "스트레스 발생 시 AI에 과도하게 몰입할 가능성이 있습니다."
+            guidelines = [
+                "⚠️ **AI 대화 시간 조절**: 일간 AI 대화 시간을 2시간 이내로 관리하세요.",
+                "⚠️ **현실 상호작용 확대**: 친구, 가족과의 대화 및 외부 활동 비율을 늘려보세요.",
+                "⚠️ **감정 점검**: 외로움이나 불안을 느낄 때 AI 외의 감정 소통 창구를 찾아보세요."
+            ]
+            alert_box_bg = "#fffbeb"
+            alert_border = "#f59e0b"
         else:
-            risk_label = "🔴 높음 (High)"
+            risk_label = "🔴 고위험 (High Risk - 경고)"
             risk_color = "#ef4444"
-            risk_desc = "AI 동반자에 대한 정서적 의존성이 매우 높습니다. 대인 관계 활동을 권장합니다."
+            risk_desc = "AI 동반자에 대한 정서적 의존도가 매우 높은 상태입니다. 전문적인 주의가 필요합니다."
+            guidelines = [
+                "🚨 **AI 사용 제한 권장**: AI 대화 시간을 단계적으로 줄이고 스크린 타임을 관리하세요.",
+                "🚨 **대인 관계 복원**: 실제 사람과의 상호작용(오프라인 모임 등)을 최우선 과제로 설정하세요.",
+                "🚨 **전문 상담 안내**: 감정적 고립감이 지속될 경우 청소년/성인 심리상담센터(1393, 1577-0199) 연계를 권장합니다."
+            ]
+            alert_box_bg = "#fef2f2"
+            alert_border = "#ef4444"
 
+        # 위험도 라벨 및 기본 상태 박스
         st.markdown(f"""
-        <div style="background-color: #f1f5f9; border-left: 5px solid {risk_color}; padding: 15px; border-radius: 8px; margin-top: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+        <div style="background-color: {alert_box_bg}; border-left: 5px solid {alert_border}; padding: 15px; border-radius: 8px; margin-top: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <h4 style="margin: 0; color: {risk_color}; font-weight: 700;">{risk_label}</h4>
             <p style="margin: 5px 0 0 0; color: #334155; font-size: 14px; font-weight: 500;">{risk_desc}</p>
         </div>
         """, unsafe_allow_html=True)
 
+        # 🛡️ 맞춤형 안전 가이드라인 알림 연계
+        st.markdown("#### 🛡️ 맞춤형 안전 가이드라인 알림")
+        for g in guidelines:
+            st.write(g)
+
+        st.markdown("---")
         st.markdown("#### 📌 입력 프로필 요약")
         st.write(f"- **AI 대화 시간**: {user_ai_chat} 시간/일")
         st.write(f"- **외로움 점수**: {user_loneliness} / 10 점")
