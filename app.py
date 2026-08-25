@@ -29,18 +29,24 @@ def configure_korean_font():
         font_name = 'NanumGothic'
 
     available_fonts = set([f.name for f in fm.fontManager.ttflist])
+    
+    # 리눅스 환경에서 나눔 폰트가 설치되어 있는지 세부 탐색
     if font_name not in available_fonts:
-        candidates = ['Malgun Gothic', 'NanumGothic', 'Dotum', 'Gulim', 'Batang', 'AppleGothic']
-        for cand in candidates:
-            if cand in available_fonts:
-                font_name = cand
-                break
+        nanum_matches = [f for f in available_fonts if 'nanum' in f.lower()]
+        if nanum_matches:
+            font_name = nanum_matches[0]
+        else:
+            candidates = ['Malgun Gothic', 'NanumGothic', 'NanumBarunGothic', 'Dotum', 'Gulim', 'Batang', 'AppleGothic']
+            for cand in candidates:
+                if cand in available_fonts:
+                    font_name = cand
+                    break
 
     # Seaborn & Matplotlib 글로벌 폰트 설정
     sns.set_theme(style="whitegrid", font=font_name)
     plt.rc('font', family=font_name)
     plt.rcParams['font.family'] = font_name
-    plt.rcParams['font.sans-serif'] = [font_name, 'Malgun Gothic', 'NanumGothic', 'AppleGothic', 'sans-serif']
+    plt.rcParams['font.sans-serif'] = [font_name, 'NanumGothic', 'NanumBarunGothic', 'Malgun Gothic', 'AppleGothic', 'sans-serif']
     plt.rcParams['axes.unicode_minus'] = False
     return font_name
 
